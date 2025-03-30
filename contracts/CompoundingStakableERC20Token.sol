@@ -2,13 +2,14 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /**
  * @title CompoundingStakableERC20Token
  * @dev ERC20 token with staking functionality that compounds yield automatically.
  */
-contract CompoundingStakableERC20Token is ERC20, Ownable {
+contract CompoundingStakableERC20Token is ERC20, ERC20Burnable, Ownable {
     // APR in basis points (10000 = 100%)
     uint256 public aprBasisPoints;
     uint256 private constant BASIS_POINTS_DIVISOR = 10000;
@@ -30,7 +31,7 @@ contract CompoundingStakableERC20Token is ERC20, Ownable {
         string memory symbol_,
         uint256 initialSupply,
         uint256 aprBasisPoints_
-    ) Ownable(msg.sender) ERC20(name_, symbol_) {
+    ) Ownable(msg.sender) ERC20(name_, symbol_) ERC20Burnable() {
         _mint(msg.sender, initialSupply);
         aprBasisPoints = aprBasisPoints_;
     }
